@@ -14,7 +14,7 @@
         <RowConstraints />
     </rowConstraints>
     <children>
-        <Pane prefHeight="450.0" prefWidth="450.0" style="-fx-background-color: #88ddbe;">
+        <Pane prefHeight="450.0" prefWidth="450.0" style="-fx-background-color: #adc7c0;">
             <children>
                 <Label layoutX="80.0" layoutY="100.0" text="User name:" textAlignment="RIGHT" textFill="#385d8a">
                     <font>
@@ -24,11 +24,11 @@
                     <font>
                         <Font name="Tahoma" size="14.0" />
                     </font></Label>
-                <TextField fx:id="regUser" layoutX="160.0" layoutY="95.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e3e2de;">
+                <TextField fx:id="regUser" layoutX="160.0" layoutY="95.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
                         <Font size="14.0" />
                     </font></TextField>
-                <PasswordField fx:id="regPassw" layoutX="160.0" layoutY="130.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e3e2de;">
+                <PasswordField fx:id="regPassw" layoutX="160.0" layoutY="130.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
                         <Font size="14.0" />
                     </font></PasswordField>
@@ -36,7 +36,7 @@
                     <font>
                         <Font size="14.0" />
                     </font></Label>
-                <Button fx:id="regSignin" layoutX="160.0" layoutY="380.0" mnemonicParsing="false" onAction="#registerLogin" prefHeight="35.0" prefWidth="215.0" style="-fx-background-color: #b2a4d5;" text="Register" textFill="#385d8a">
+                <Button fx:id="regSignin" layoutX="160.0" layoutY="380.0" mnemonicParsing="false" onAction="#registerLogin" prefHeight="35.0" prefWidth="215.0" style="-fx-background-color: #b2a4d5; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Register" textFill="#385d8a">
                <font>
                   <Font name="DejaVu Sans Bold" size="14.0" />
                </font></Button>
@@ -51,12 +51,12 @@
                         <Font name="Tahoma" size="14.0" />
                     </font>
                 </Label>
-                <PasswordField fx:id="regConfPassw" layoutX="160.0" layoutY="165.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e3e2de;">
+                <PasswordField fx:id="regConfPassw" layoutX="160.0" layoutY="165.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </PasswordField>
-                <TextField fx:id="regEmail" layoutX="160.0" layoutY="200.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e3e2de;">
+                <TextField fx:id="regEmail" layoutX="160.0" layoutY="200.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
                         <Font size="14.0" />
                     </font>
@@ -71,7 +71,7 @@
                <font>
                   <Font name="Tahoma" size="13.0" />
                </font></Label>
-            <ComboBox fx:id="regTeam" layoutX="160.0" layoutY="235.0" prefHeight="25.0" prefWidth="215.0" promptText="-- Choose Team --" >
+            <ComboBox fx:id="regTeam" layoutX="160.0" layoutY="235.0" prefHeight="25.0" prefWidth="215.0" promptText="-- Choose Team --" style="-fx-background-color: #e0dfe4;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Supreme Team" />
@@ -80,9 +80,9 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Pane layoutY="-1.0" prefHeight="68.0" prefWidth="450.0" style="-fx-background-color: #b2a4d5;">
+            <Pane layoutY="-1.0" prefHeight="68.0" prefWidth="450.0" style="-fx-background-color: #b2a4d5; -fx-border-color: #a2a6a5;">
                <children>
-                      <Label layoutX="10.0" layoutY="8.0" prefHeight="53.0" prefWidth="430.0" styleClass="style.css" text="Register New Team Member" textAlignment="CENTER" textFill="#385d8a">
+                      <Label alignment="CENTER" layoutX="10.0" layoutY="8.0" prefHeight="53.0" prefWidth="430.0" styleClass="style.css" text="Register New Team Member" textAlignment="CENTER" textFill="#385d8a">
                           <font>
                               <Font name="Roboto Light" size="33.0" />
                           </font>
