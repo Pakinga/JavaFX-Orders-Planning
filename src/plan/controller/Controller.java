@@ -1,5 +1,8 @@
 package plan.controller;
 
+import com.sun.java.browser.plugin2.liveconnect.v1.Result;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,11 +13,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import plan.model.Plan;
+import plan.model.PlanDAO;
 import plan.model.User;
 import plan.model.UserDAO;
 import plan.utils.Validation;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class Controller {
     @FXML
@@ -37,7 +44,40 @@ public class Controller {
     private CheckBox admin;
     @FXML
     private Label regError;
-
+    @FXML
+    private TextField orderNo;
+    @FXML
+    private CheckBox cbK;
+    @FXML
+    private CheckBox cbM;
+    @FXML
+    private CheckBox cbJ;
+    @FXML
+    private CheckBox cbP;
+    @FXML
+    private CheckBox cbA;
+    @FXML
+    private CheckBox cbS;
+    @FXML
+    private RadioButton rbScs;
+    @FXML
+    private RadioButton rbMko;
+    @FXML
+    private RadioButton rbSko;
+    @FXML
+    private RadioButton rbZko;
+    @FXML
+    private ComboBox comboStatus;
+    @FXML
+    private Label warning;
+    @FXML
+    private TextField plannedTime;
+    @FXML
+    private TextField actualTime;
+    @FXML
+    private Label logname;
+    @FXML
+    private TableView table;
 
 
     ResultSet rsAllEntries;
@@ -49,6 +89,7 @@ public class Controller {
             String msg = userDAO.login(username.getText(), password.getText());
             if (msg.contains("Successful")) {
                 User user = userDAO.getUser(username.getText());
+                dashboard(event, user);
                 error.setText("You made log in");
                 //
             } else {
@@ -61,7 +102,7 @@ public class Controller {
         error.setVisible(true);
     }
 
-    public void loadLogin(){
+    public void loadLogin() {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("../view/login.fxml"));
             Stage stage = new Stage();
@@ -86,6 +127,7 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
     public void registerLogin(ActionEvent event) {
         boolean isRegistered = true;
 
@@ -109,7 +151,7 @@ public class Controller {
         }
 
         if (isRegistered) {
-            User user = new User(regUser.getText(), regPassw.getText(), regEmail.getText(), (String)regTeam.getValue(), admin.isSelected());
+            User user = new User(regUser.getText(), regPassw.getText(), regEmail.getText(), (String) regTeam.getValue(), admin.isSelected());
             UserDAO userDAO = new UserDAO();
             String msg = userDAO.register(user);
             if (msg.contains("successfully")) {
@@ -125,5 +167,219 @@ public class Controller {
             }
         }
     }
+
+    public void dashboard(ActionEvent event, User user) {
+        try {
+            // we are in controller folder, but our view is not here, so we need to go one step up - ../
+            Parent root = FXMLLoader.load(getClass().getResource("../view/dashboard.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Dashboard");
+
+            // scrollBar is added into dashboard
+            ScrollPane sp = new ScrollPane();
+            sp.setContent(root);
+            stage.setScene(new Scene(sp, 1300, 850));
+
+            //style.css is uploaded, because disabled buttons(update & delete) should be displayed with opacity
+            if (!user.isAdmin()) {
+                sp.getStylesheets().add(String.valueOf(getClass().getResource("../view/buttonStyle.css")));
+            }
+            sp.getStylesheets().add(String.valueOf(getClass().getResource("../view/style.css")));
+            Label lblTeam = (Label) root.lookup("#team");
+            Label lblLoginName = (Label) root.lookup("#logname");
+            Label lblLoginRole = (Label) root.lookup("#role");
+            if (lblTeam != null) lblTeam.setText(user.getTeamName());
+            if (lblLoginName != null) lblLoginName.setText(user.getUsername());
+            if (lblLoginRole != null) lblLoginRole.setText(user.isAdmin() ? "Leader" : "Member");
+
+            stage.show();
+            ((Node) (event.getSource())).getScene().getWindow().hide();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void create() {
+        String orderNumber = orderNo.getText();
+        int orderNum = 0;
+        String planTime = plannedTime.getText();
+        int plTime = 0;
+        String realTime = actualTime.getText();
+        int actlTime = 0;
+
+        String worker = "";
+
+        if (cbJ.isSelected()) {
+            worker += cbJ.getText() + ",";
+        }
+        if (cbK.isSelected()) {
+            worker += cbK.getText() + ",";
+        }
+        if (cbM.isSelected()) {
+            worker += cbM.getText() + ",";
+        }
+        if (cbP.isSelected()) {
+            worker += cbP.getText() + ",";
+        }
+        if (cbA.isSelected()) {
+            worker += cbA.getText() + ",";
+        }
+        if (cbS.isSelected()) {
+            worker += cbS.getText() + ",";
+        }
+        worker = worker.substring(0, worker.length() - 1);
+
+        String productType = "";
+        if (rbScs.isSelected()) {
+            productType += rbScs.getText();
+        } else if (rbSko.isSelected()) {
+            productType += rbSko.getText();
+        } else if (rbMko.isSelected()) {
+            productType += rbMko.getText();
+        } else if (rbZko.isSelected()) {
+            productType += rbZko.getText();
+        }
+
+        String orderStatus = "";
+        if (!comboStatus.getSelectionModel().isEmpty()) {
+            orderStatus += comboStatus.getValue();
+        } else {
+            warning.setText("Please check team members");
+        }
+
+        if (!Validation.isValidOrderNumber(orderNumber)) {
+            warning.setText("Order number should be in 9XXXXXX format");
+        } else if (!Validation.isValidTime(planTime)) {
+            warning.setText("Planned time required");
+        } else if (!actualTime.getText().isEmpty() && !Validation.isValidTime(realTime)) {
+            warning.setText("Actual time is incorrect");
+        } else {
+            orderNum = Integer.parseInt(orderNo.getText());
+            plTime = Integer.parseInt(plannedTime.getText());
+            if (actualTime.getText().isEmpty()) {
+                actlTime = 0;
+            } else {
+                actlTime = Integer.parseInt(actualTime.getText());
+            }
+
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.getUser(logname.getText());
+            PlanDAO planDAO = new PlanDAO();
+            int userId = user.getId();
+            Plan plan = new Plan(orderNum, productType, worker, plTime, actlTime, orderStatus, userId);
+            String msg = planDAO.add(plan);
+            warning.setText(msg);
+        }
+        updateTableFromDB(orderNumber);
+    }
+
+    public void searchOrder() {
+        updateTableFromDB(orderNo.getText());
+    }
+
+    public void updateTableFromDB(String orderNum) {
+        PlanDAO planDAO = new PlanDAO();
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUser(logname.getText());
+        try {
+            rsAllEntries = planDAO.searchByOrderNumber(orderNum, user);
+        } catch (NullPointerException e) {
+            warning.setText("No rows to display");
+        }
+        clearFields();
+        fetColumnList();
+        fetRowList();
+    }
+
+    // po duomenų įvedimo išvalo nurodytus laukus, kad būtų patogiau suvesti naujus duomenis
+    private void clearFields() {
+        orderNo.clear();
+        orderNo.setPromptText("9XXXXXX");
+        plannedTime.clear();
+        actualTime.clear();
+        comboStatus.valueProperty().set(null);
+    }
+
+    public void fetColumnList() {
+
+        try {
+
+            table.getColumns().clear();
+            if (rsAllEntries != null) {
+                //SQL FOR SELECTING ALL OF CUSTOMER
+
+                for (int i = 0; i < rsAllEntries.getMetaData().getColumnCount(); i++) {
+                    //We are using non property style for making dynamic table
+                    final int j = i;
+                    TableColumn col = new TableColumn();
+                    switch (rsAllEntries.getMetaData().getColumnName(i + 1)) {
+                        case "order_number":
+                            col.setText("Order Number");
+                            break;
+                        case "product_type":
+                            col.setText("Produt Type");
+                            break;
+                        case "worker":
+                            col.setText("Worker");
+                            break;
+                        case "planned_time":
+                            col.setText("Planned Time");
+                            break;
+                        case "actual_time":
+                            col.setText("Actual Time");
+                            break;
+                        case "order_status":
+                            col.setText("Order Status");
+                            break;
+                        default:
+                            col.setText(rsAllEntries.getMetaData().getColumnName(i + 1)); //if column name in SQL Database is not found, then TableView column receive SQL Database current column name (not readable)
+                            break;
+                    }
+                    col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
+                        public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
+                            return new SimpleStringProperty(param.getValue().get(j).toString());
+                        }
+                    });
+
+                    table.getColumns().removeAll(col);
+                    table.getColumns().addAll(col);
+                    System.out.println("Column [" + i + "] ");
+                }
+
+            } else {
+                warning.setText("No columns to display");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failure getting column data from SQL ");
+        }
+    }
+
+    //fetches rows and data from the list
+    public void fetRowList() {
+
+        try {
+            data.clear();
+            if (rsAllEntries != null) {
+                while (rsAllEntries.next()) {
+                    //Iterate Row
+                    ObservableList row = FXCollections.observableArrayList();
+                    for (int i = 1; i <= rsAllEntries.getMetaData().getColumnCount(); i++) {
+                        //Iterate Column
+                        row.add(rsAllEntries.getString(i));
+                    }
+                    System.out.println("Row [1] added " + row);
+                    data.add(row);
+                }
+                //connects table with list
+                table.setItems(data);
+            } else {
+                warning.setText("No rows to display");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Failure getting row data from SQL ");
+        }
+    }
+
 
 }

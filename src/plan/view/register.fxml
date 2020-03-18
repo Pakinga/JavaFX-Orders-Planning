@@ -32,10 +32,6 @@
                     <font>
                         <Font size="14.0" />
                     </font></PasswordField>
-                <Label fx:id="error" alignment="CENTER" layoutX="40.0" layoutY="310.0" prefHeight="27.0" prefWidth="370.0" text="error" textFill="#9b1c31">
-                    <font>
-                        <Font size="14.0" />
-                    </font></Label>
                 <Button fx:id="regSignin" layoutX="160.0" layoutY="380.0" mnemonicParsing="false" onAction="#registerLogin" prefHeight="35.0" prefWidth="215.0" style="-fx-background-color: #b2a4d5; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Register" textFill="#385d8a">
                <font>
                   <Font name="DejaVu Sans Bold" size="14.0" />
@@ -61,7 +57,7 @@
                         <Font size="14.0" />
                     </font>
                 </TextField>
-                <Label fx:id="regError" layoutX="26.0" layoutY="340.0" prefHeight="30.0" prefWidth="399.0" text="regError" textAlignment="RIGHT" textFill="#9b1c31">
+                <Label fx:id="regError" layoutX="26.0" layoutY="340.0" prefHeight="30.0" prefWidth="399.0" textAlignment="RIGHT" textFill="#9b1c31">
                     <font>
                         <Font size="14.0" />
                     </font>

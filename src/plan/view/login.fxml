@@ -34,7 +34,7 @@
                <font>
                   <Font name="DejaVu Sans Bold" size="14.0" />
                </font></Button>
-                <Label fx:id="error" alignment="CENTER" layoutX="40.0" layoutY="218.0" prefHeight="53.0" prefWidth="370.0" text="error" textFill="#9b1c31">
+                <Label fx:id="error" alignment="CENTER" layoutX="40.0" layoutY="218.0" prefHeight="53.0" prefWidth="370.0" textFill="#9b1c31">
                     <font>
                         <Font size="18.0" />
                     </font></Label>

@@ -7,6 +7,9 @@ public class Validation {
     public static final String USER_NAME_REGEX_PATTERN = "^[a-zA-z0-9]{5,12}$";
     public static final String USER_PASSWORD_REGEX_PATTERN = "^[a-zA-z0-9@!?_#&%.^]{5,12}$";
     public static final String USER_EMAIL_REGEX_PATTERN = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,50}$";
+    public static final String ORDER_NUMBER_REGEX_PATTERN = "^[9]\\d{6}$";
+    public static final String TIME_REGEX_PATTERN = "^[0-9]{1,2}$";
+
 
     public static boolean isValidUsername(String user_name) {
         Pattern pattern = Pattern.compile(USER_NAME_REGEX_PATTERN);
@@ -25,4 +28,17 @@ public class Validation {
         Matcher matcher = pattern.matcher(regEmail);
         return matcher.find();
     }
+
+    public static boolean isValidOrderNumber(String orderNumber) {
+        Pattern pattern = Pattern.compile(ORDER_NUMBER_REGEX_PATTERN);
+        Matcher matcher = pattern.matcher(orderNumber);
+        return matcher.find();
+    }
+
+    public static boolean isValidTime(String time) {
+        Pattern pattern = Pattern.compile(TIME_REGEX_PATTERN);
+        Matcher matcher = pattern.matcher(time);
+        return matcher.find();
+    }
+
 }
