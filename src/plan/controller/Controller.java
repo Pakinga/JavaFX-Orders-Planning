@@ -1,6 +1,5 @@
 package plan.controller;
 
-import com.sun.java.browser.plugin2.liveconnect.v1.Result;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -12,6 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import plan.model.Plan;
@@ -78,6 +78,8 @@ public class Controller {
     private Label logname;
     @FXML
     private TableView table;
+    @FXML
+    private Label role;
 
 
     ResultSet rsAllEntries;
@@ -248,12 +250,16 @@ public class Controller {
             warning.setText("Please check team members");
         }
 
-        if (!Validation.isValidOrderNumber(orderNumber)) {
+        if (orderNumber.equals("")){
+            warning.setText("Order number required");
+        } else if (!Validation.isValidOrderNumber(orderNumber)) {
             warning.setText("Order number should be in 9XXXXXX format");
-        } else if (!Validation.isValidTime(planTime)) {
+        } else  if (planTime.equals("")){
             warning.setText("Planned time required");
+        } else if (!Validation.isValidTime(planTime)) {
+            warning.setText("Planned time is incorrect. Enter number 1-99");
         } else if (!actualTime.getText().isEmpty() && !Validation.isValidTime(realTime)) {
-            warning.setText("Actual time is incorrect");
+            warning.setText("Actual time is incorrect. Enter number 1-99");
         } else {
             orderNum = Integer.parseInt(orderNo.getText());
             plTime = Integer.parseInt(plannedTime.getText());
@@ -270,12 +276,106 @@ public class Controller {
             Plan plan = new Plan(orderNum, productType, worker, plTime, actlTime, orderStatus, userId);
             String msg = planDAO.add(plan);
             warning.setText(msg);
+            updateTableFromDB(orderNumber);
         }
-        updateTableFromDB(orderNumber);
+
+    }
+
+    public void update() {
+        if(role.getText().equals("Leader")) {
+            String orderNumber = orderNo.getText();
+            int orderNum = 0;
+            String planTime = plannedTime.getText();
+            int plTime = 0;
+            String realTime = actualTime.getText();
+            int actlTime = 0;
+
+            String worker = "";
+
+            if (cbJ.isSelected()) {
+                worker += cbJ.getText() + ",";
+            }
+            if (cbK.isSelected()) {
+                worker += cbK.getText() + ",";
+            }
+            if (cbM.isSelected()) {
+                worker += cbM.getText() + ",";
+            }
+            if (cbP.isSelected()) {
+                worker += cbP.getText() + ",";
+            }
+            if (cbA.isSelected()) {
+                worker += cbA.getText() + ",";
+            }
+            if (cbS.isSelected()) {
+                worker += cbS.getText() + ",";
+            }
+            worker = worker.substring(0, worker.length() - 1);
+
+            String productType = "";
+            if (rbScs.isSelected()) {
+                productType += rbScs.getText();
+            } else if (rbSko.isSelected()) {
+                productType += rbSko.getText();
+            } else if (rbMko.isSelected()) {
+                productType += rbMko.getText();
+            } else if (rbZko.isSelected()) {
+                productType += rbZko.getText();
+            }
+
+            String orderStatus = "";
+            if (!comboStatus.getSelectionModel().isEmpty()) {
+                orderStatus += comboStatus.getValue();
+            } else {
+                warning.setText("Please check team members");
+            }
+
+            if (orderNumber.equals("")) {
+                warning.setText("Order number required");
+            } else if (!Validation.isValidOrderNumber(orderNumber)) {
+                warning.setText("Order number should be in 9XXXXXX format");
+            } else if (planTime.equals("")) {
+                warning.setText("Planned time required");
+            } else if (!Validation.isValidTime(planTime)) {
+                warning.setText("Planned time is incorrect. Enter number 1-99");
+            } else if (!actualTime.getText().isEmpty() && !Validation.isValidTime(realTime)) {
+                warning.setText("Actual time is incorrect. Enter number 1-99");
+            } else {
+                orderNum = Integer.parseInt(orderNo.getText());
+                plTime = Integer.parseInt(plannedTime.getText());
+                if (actualTime.getText().isEmpty()) {
+                    actlTime = 0;
+                } else {
+                    actlTime = Integer.parseInt(actualTime.getText());
+                }
+
+                UserDAO userDAO = new UserDAO();
+                User user = userDAO.getUser(logname.getText());
+                PlanDAO planDAO = new PlanDAO();
+                int userId = user.getId();
+                Plan plan = new Plan(orderNum, productType, worker, plTime, actlTime, orderStatus, userId);
+                planDAO.editByOrderNum(plan);
+                updateTableFromDB(orderNumber);
+            }
+        } else {
+            clearFields();
+            warning.setText("Update feature is only for Team Leader");
+        }
     }
 
     public void searchOrder() {
         updateTableFromDB(orderNo.getText());
+    }
+
+    public void delete() {
+        if (role.getText().equals("Leader")) {
+            PlanDAO planDAO = new PlanDAO();
+            planDAO.deleteOrderNum(Integer.parseInt((String) orderNo.getText()));
+            updateTableFromDB("");
+        } else {
+            clearFields();
+            warning.setText("Delete feature is only for team leader");
+        }
     }
 
     public void updateTableFromDB(String orderNum) {
@@ -290,12 +390,21 @@ public class Controller {
         clearFields();
         fetColumnList();
         fetRowList();
+
     }
+
+
 
     // po duomenų įvedimo išvalo nurodytus laukus, kad būtų patogiau suvesti naujus duomenis
     private void clearFields() {
         orderNo.clear();
         orderNo.setPromptText("9XXXXXX");
+        cbK.setSelected(false);
+        cbM.setSelected(false);
+        cbJ.setSelected(false);
+        cbP.setSelected(false);
+        cbA.setSelected(false);
+        cbS.setSelected(false);
         plannedTime.clear();
         actualTime.clear();
         comboStatus.valueProperty().set(null);
@@ -357,7 +466,6 @@ public class Controller {
 
     //fetches rows and data from the list
     public void fetRowList() {
-
         try {
             data.clear();
             if (rsAllEntries != null) {
@@ -380,6 +488,15 @@ public class Controller {
             System.out.println("Failure getting row data from SQL ");
         }
     }
+
+    public void logOutDashboard(ActionEvent event) {
+
+        loadLogin();
+        // hides current stage (window)
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+
+    }
+
 
 
 }

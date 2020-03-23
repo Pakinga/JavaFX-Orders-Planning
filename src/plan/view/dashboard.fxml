@@ -2,6 +2,7 @@
 
 <?import java.lang.*?>
 <?import javafx.collections.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -28,12 +29,12 @@
                         <Font name="Roboto Light" size="16.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="plannedTime" layoutX="20.0" layoutY="385.0" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="plannedTime" layoutX="20.0" layoutY="385.0" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
                         <Font name="Roboto Light" size="15.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="actualTime" layoutX="240.0" layoutY="385.0" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="actualTime" layoutX="170.0" layoutY="385.0" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
                         <Font name="Roboto Light" size="15.0" />
                     </font>
@@ -48,17 +49,17 @@
                         <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="update" layoutX="20.0" layoutY="625.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="UPDATE" textFill="#385d8a">
+                <Button fx:id="update" layoutX="20.0" layoutY="625.0" mnemonicParsing="false" onAction="#update" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="UPDATE" textFill="#385d8a">
                     <font>
                         <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="delete" layoutX="245.0" layoutY="625.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="DELETE" textFill="#385d8a">
+                <Button fx:id="delete" layoutX="245.0" layoutY="625.0" mnemonicParsing="false" onAction="#delete" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="DELETE" textFill="#385d8a">
                     <font>
                         <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
-                <Label fx:id="warning" layoutX="20.0" layoutY="525.0" prefHeight="39.0" prefWidth="420.0">
+                <Label fx:id="warning" layoutX="20.0" layoutY="525.0" prefHeight="39.0" prefWidth="420.0" textFill="#9b1c31">
                     <font>
                         <Font size="18.0" />
                     </font>
@@ -146,12 +147,12 @@
                         <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
-                <Label layoutX="20.0" layoutY="360.0" text="Planned time, days:" textFill="#385d8a">
+                <Label layoutX="20.0" layoutY="360.0" text="Planned time" textFill="#385d8a">
                     <font>
                         <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
-                <Label layoutX="240.0" layoutY="360.0" text="Actual time, days:" textFill="#385d8a">
+                <Label layoutX="170.0" layoutY="360.0" text="Actual time" textFill="#385d8a">
                     <font>
                         <Font name="DejaVu Sans" size="14.0" />
                     </font>
@@ -166,6 +167,24 @@
                         <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
+            <Button fx:id="updateTime" layoutX="280.0" layoutY="385.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="155.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Update actual time" textFill="#385d8a">
+               <font>
+                  <Font name="DejaVu Sans" size="14.0" />
+               </font>
+               <padding>
+                  <Insets left="-1.0" />
+               </padding>
+            </Button>
+            <Label layoutX="75.0" layoutY="405.0" text="days" textFill="#385d8a">
+               <font>
+                  <Font name="DejaVu Sans" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="225.0" layoutY="405.0" text="days" textFill="#385d8a">
+               <font>
+                  <Font name="DejaVu Sans" size="14.0" />
+               </font>
+            </Label>
 
             </children>
         </Pane>
@@ -196,7 +215,7 @@
                         <Font name="DejaVu Sans" size="16.0" />
                     </font>
                 </Label>
-                <Button fx:id="logOut" layoutX="372.0" layoutY="14.0" mnemonicParsing="false" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Log out" textFill="#385d8a">
+                <Button fx:id="logOut" layoutX="372.0" layoutY="14.0" mnemonicParsing="false" onAction="#logOutDashboard" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Log out" textFill="#385d8a">
                     <font>
                         <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>

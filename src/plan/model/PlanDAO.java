@@ -27,18 +27,16 @@ public class PlanDAO {
         }
     }
     public ResultSet searchByOrderNumber(String orderNum, User user) {
-        String query2 = "";
-        ArrayList<Plan> plan = new ArrayList<>();
+        String query2 = "SELECT order_number, product_type, worker, planned_time, actual_time, order_status, user_id FROM " + Constant.TABLE_NAME1;
         if (user.isAdmin()) {
-            if (orderNum.equals("")) {
-                query2 = "SELECT order_number, product_type, worker, planned_time, actual_time, order_status, user_id FROM " + Constant.TABLE_NAME1;
-            } else
-                query2 = "SELECT order_number, product_type, worker, planned_time, actual_time, order_status, user_id FROM " + Constant.TABLE_NAME1 + " WHERE order_number LIKE \"%" + orderNum + "%\" ";
+            if (!orderNum.equals("")) {
+                query2 += " WHERE order_number LIKE \"%" + orderNum + "%\" ";
+            }
         } else {
             if (orderNum.equals("")) {
-                query2 = "SELECT order_number, product_type, worker, planned_time, actual_time, order_status, user_id FROM " + Constant.TABLE_NAME1 + " WHERE user_id = " + user.getId();
+                query2 += " WHERE user_id = " + user.getId();
             } else
-                query2 = "SELECT order_number, product_type, worker, planned_time, actual_time, order_status, user_id FROM " + Constant.TABLE_NAME1 + " WHERE user_id = " + user.getId() + " AND order_number LIKE \"%" + orderNum + "%\" ";
+                query2 += " WHERE user_id = " + user.getId() + " AND order_number LIKE \"%" + orderNum + "%\" ";
         }
         System.out.println("is admin? " + user.isAdmin());
         System.out.println(query2);
@@ -55,4 +53,40 @@ public class PlanDAO {
         }
         return resultSet;
     }
+
+    public void editByOrderNum(Plan plan){
+        String query = "update " + Constant.TABLE_NAME1 + " set product_type=?, worker=?, planned_time=?, actual_time=?, order_status=?" +
+                " where order_number=?";
+        try {
+            Connection connection = DriverManager.getConnection(Constant.URL + Constant.DB_NAME, "root", "");
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, plan.getProductType());
+            preparedStatement.setString(2, plan.getWorker());
+            preparedStatement.setInt(3, plan.getPlannedTime());
+            preparedStatement.setInt(4, plan.getActualTime());
+            preparedStatement.setString(5, plan.getOrderStatus());
+            preparedStatement.setInt(6, plan.getOrderNum());
+            preparedStatement.executeUpdate();
+            System.out.println("Data was successfully edited");
+        } catch (SQLException e) {
+            System.out.println("Error. Cannot edit data");
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteOrderNum(int num){
+        String query = "delete from " + Constant.TABLE_NAME1 + " where order_number=?";
+        try {
+            Connection connection = DriverManager.getConnection(Constant.URL + Constant.DB_NAME, "root", "");
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, num);
+            preparedStatement.executeUpdate();
+            System.out.println("Data was successfully deleted");
+        } catch (SQLException e) {
+            System.out.println("Error. Cannot delete data");
+            e.printStackTrace();
+        }
+    }
+
+
 }

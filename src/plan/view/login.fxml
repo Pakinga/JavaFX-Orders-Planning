@@ -22,7 +22,7 @@
                     <font>
                         <Font name="Tahoma" size="18.0" />
                     </font></Label>
-                <TextField fx:id="username" layoutX="160.0" layoutY="115.0" prefHeight="40.0" prefWidth="215.0" promptText="dsgfhfdjjd" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="username" layoutX="160.0" layoutY="115.0" prefHeight="40.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
                         <Font name="Roboto Light" size="18.0" />
                     </font></TextField>

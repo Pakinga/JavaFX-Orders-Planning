@@ -4,3 +4,12 @@
 #processing{
 -fx-fill : #f7f194;
 }
+.table-row-cell: Sheduled{
+    -fx-fill : #eb6589;
+}
+.table-row-cell: Processing{
+    -fx-fill : #f7f194;
+}
+#create{
+        -fx-opacity: 0.7;
+}
