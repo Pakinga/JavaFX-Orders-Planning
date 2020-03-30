@@ -528,6 +528,10 @@ public class Controller {
     private void clearFields() {
         orderNo.clear();
         orderNo.setPromptText("9XXXXXX");
+        rbScs.setSelected(true);
+        rbSko.setSelected(false);
+        rbMko.setSelected(false);
+        rbZko.setSelected(false);
         cbK.setSelected(false);
         cbM.setSelected(false);
         cbJ.setSelected(false);
