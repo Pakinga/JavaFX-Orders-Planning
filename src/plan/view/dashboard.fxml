@@ -137,7 +137,7 @@
                         <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
-                <Button layoutX="240.0" layoutY="45.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="200.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Show" textFill="#385d8a">
+                <Button layoutX="240.0" layoutY="45.0" mnemonicParsing="false" onAction="#showOrder" prefHeight="39.0" prefWidth="200.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Show order" textFill="#385d8a">
                     <font>
                         <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
@@ -167,7 +167,7 @@
                         <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
-            <Button fx:id="updateTime" layoutX="280.0" layoutY="385.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="155.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Update actual time" textFill="#385d8a">
+            <Button fx:id="updateTime" layoutX="280.0" layoutY="385.0" mnemonicParsing="false" onAction="#updateActualTime" prefHeight="39.0" prefWidth="155.0" style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Update actual time" textFill="#385d8a">
                <font>
                   <Font name="DejaVu Sans" size="14.0" />
                </font>

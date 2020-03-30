@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 2020 m. Kov 12 d. 16:24
+-- Generation Time: 2020 m. Kov 30 d. 17:26
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.1
 
@@ -42,7 +42,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `username`, `password`, `email`, `team_name`, `admin`) VALUES
-(1, 'Saulius', 'saulius123', 'saulius@job.com', 'Supreme Team', 1),
+(1, 'Saulaitis', 'saule12', 'saulaitis@job.com', 'Supreme Team', 1),
 (2, 'Samas', 'samas23', 'samas@job.com', 'Dream Team', 0);
 
 --

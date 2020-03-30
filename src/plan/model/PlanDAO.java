@@ -1,12 +1,14 @@
 package plan.model;
 
 import java.sql.*;
+
 import plan.utils.Constant;
+
 import java.util.ArrayList;
 
 public class PlanDAO {
 
-    public String add(Plan plan){
+    public String add(Plan plan) {
         String query = "insert into " + Constant.TABLE_NAME1 + " (order_number, product_type, worker, planned_time, actual_time, order_status, user_id)" +
                 "values (?,?,?,?,?,?,?)";
         try {
@@ -26,6 +28,7 @@ public class PlanDAO {
             return "Failure creating new entry";
         }
     }
+
     public ResultSet searchByOrderNumber(String orderNum, User user) {
         String query2 = "SELECT order_number, product_type, worker, planned_time, actual_time, order_status, user_id FROM " + Constant.TABLE_NAME1;
         if (user.isAdmin()) {
@@ -54,9 +57,32 @@ public class PlanDAO {
         return resultSet;
     }
 
-    public void editByOrderNum(Plan plan){
-        String query = "update " + Constant.TABLE_NAME1 + " set product_type=?, worker=?, planned_time=?, actual_time=?, order_status=?" +
-                " where order_number=?";
+    public ResultSet showByOrderNumber(String orderNum, User user) {
+        String query2 = "SELECT order_number, product_type, worker, planned_time, actual_time, order_status, user_id FROM " + Constant.TABLE_NAME1;
+        if (user.isAdmin()) {
+            query2 += " WHERE order_number =" + orderNum;
+        } else {
+            query2 += " WHERE user_id = " + user.getId() + " AND order_number = " + orderNum;
+        }
+        System.out.println("is admin? " + user.isAdmin());
+        System.out.println(query2);
+
+        ResultSet resultSet = null;
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        try {
+            connection = DriverManager.getConnection(Constant.URL + Constant.DB_NAME, "root", "");
+            preparedStatement = connection.prepareStatement(query2);
+            resultSet = preparedStatement.executeQuery(query2);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public void editByOrderNum(Plan plan) {
+        String query = "UPDATE " + Constant.TABLE_NAME1 + " SET product_type=?, worker=?, planned_time=?, actual_time=?, order_status=?" +
+                " WHERE order_number=?";
         try {
             Connection connection = DriverManager.getConnection(Constant.URL + Constant.DB_NAME, "root", "");
             PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -74,8 +100,25 @@ public class PlanDAO {
         }
     }
 
-    public void deleteOrderNum(int num){
-        String query = "delete from " + Constant.TABLE_NAME1 + " where order_number=?";
+    public void editActualTime(Plan plan, int userId) {
+        String query = "UPDATE " + Constant.TABLE_NAME1 + " SET actual_time=?" +
+                " WHERE user_id = " + userId + " AND order_number = ?";
+        try {
+            Connection connection = DriverManager.getConnection(Constant.URL + Constant.DB_NAME, "root", "");
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, plan.getActualTime());
+            preparedStatement.setInt(2, plan.getOrderNum());
+            preparedStatement.executeUpdate();
+            System.out.println("Edit Actual time query: " + query);
+            System.out.println("Actual time was successfully edited");
+        } catch (SQLException e) {
+            System.out.println("Error. Cannot edit actual time. User is not valid");
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteOrderNum(int num) {
+        String query = "DELETE FROM " + Constant.TABLE_NAME1 + " WHERE order_number=?";
         try {
             Connection connection = DriverManager.getConnection(Constant.URL + Constant.DB_NAME, "root", "");
             PreparedStatement preparedStatement = connection.prepareStatement(query);

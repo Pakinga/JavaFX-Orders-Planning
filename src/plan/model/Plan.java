@@ -31,6 +31,11 @@ public class Plan {
         this.userId = userId;
     }
 
+    public Plan(int orderNum, int actualTime) {
+        this.orderNum = orderNum;
+        this.actualTime = actualTime;
+    }
+
     public int getId() {
         return id;
     }

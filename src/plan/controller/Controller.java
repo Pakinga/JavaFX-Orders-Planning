@@ -20,8 +20,11 @@ import plan.model.User;
 import plan.model.UserDAO;
 import plan.utils.Validation;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Controller {
     @FXML
@@ -182,16 +185,17 @@ public class Controller {
             sp.setContent(root);
             stage.setScene(new Scene(sp, 1300, 850));
 
-            //style.css is uploaded, because disabled buttons(update & delete) should be displayed with opacity
+            // disabled buttons(update & delete, etc.) should be displayed with opacity
             if (!user.isAdmin()) {
-                sp.getStylesheets().add(String.valueOf(getClass().getResource("../view/buttonStyle.css")));
-            }
+                sp.getStylesheets().add(String.valueOf(getClass().getResource("../view/buttonStyleMember.css")));
+            } else sp.getStylesheets().add(String.valueOf(getClass().getResource("../view/buttonStyleLeader.css")));
             sp.getStylesheets().add(String.valueOf(getClass().getResource("../view/style.css")));
             Label lblTeam = (Label) root.lookup("#team");
             Label lblLoginName = (Label) root.lookup("#logname");
             Label lblLoginRole = (Label) root.lookup("#role");
             if (lblTeam != null) lblTeam.setText(user.getTeamName());
             if (lblLoginName != null) lblLoginName.setText(user.getUsername());
+            //Team leader has admin rights
             if (lblLoginRole != null) lblLoginRole.setText(user.isAdmin() ? "Leader" : "Member");
 
             stage.show();
@@ -213,24 +217,24 @@ public class Controller {
         String worker = "";
 
         if (cbJ.isSelected()) {
-            worker += cbJ.getText() + ",";
+            worker += cbJ.getText() + ", ";
         }
         if (cbK.isSelected()) {
-            worker += cbK.getText() + ",";
+            worker += cbK.getText() + ", ";
         }
         if (cbM.isSelected()) {
-            worker += cbM.getText() + ",";
+            worker += cbM.getText() + ", ";
         }
         if (cbP.isSelected()) {
-            worker += cbP.getText() + ",";
+            worker += cbP.getText() + ", ";
         }
         if (cbA.isSelected()) {
             worker += cbA.getText() + ",";
         }
         if (cbS.isSelected()) {
-            worker += cbS.getText() + ",";
+            worker += cbS.getText() + ", ";
         }
-        worker = worker.substring(0, worker.length() - 1);
+        worker = worker.substring(0, worker.length() - 2);
 
         String productType = "";
         if (rbScs.isSelected()) {
@@ -250,16 +254,16 @@ public class Controller {
             warning.setText("Please check team members");
         }
 
-        if (orderNumber.equals("")){
+        if (orderNumber.equals("")) {
             warning.setText("Order number required");
         } else if (!Validation.isValidOrderNumber(orderNumber)) {
             warning.setText("Order number should be in 9XXXXXX format");
-        } else  if (planTime.equals("")){
+        } else if (planTime.equals("")) {
             warning.setText("Planned time required");
-        } else if (!Validation.isValidTime(planTime)) {
+        } else if (!Validation.isValidPlannedTime(planTime)) {
             warning.setText("Planned time is incorrect. Enter number 1-99");
-        } else if (!actualTime.getText().isEmpty() && !Validation.isValidTime(realTime)) {
-            warning.setText("Actual time is incorrect. Enter number 1-99");
+        } else if (!actualTime.getText().isEmpty() && !Validation.isValidActualTime(realTime)) {
+            warning.setText("Actual time is incorrect. Enter number 0-99");
         } else {
             orderNum = Integer.parseInt(orderNo.getText());
             plTime = Integer.parseInt(plannedTime.getText());
@@ -282,7 +286,7 @@ public class Controller {
     }
 
     public void update() {
-        if(role.getText().equals("Leader")) {
+        if (role.getText().equals("Leader")) {
             String orderNumber = orderNo.getText();
             int orderNum = 0;
             String planTime = plannedTime.getText();
@@ -293,24 +297,24 @@ public class Controller {
             String worker = "";
 
             if (cbJ.isSelected()) {
-                worker += cbJ.getText() + ",";
+                worker += cbJ.getText() + ", ";
             }
             if (cbK.isSelected()) {
-                worker += cbK.getText() + ",";
+                worker += cbK.getText() + ", ";
             }
             if (cbM.isSelected()) {
-                worker += cbM.getText() + ",";
+                worker += cbM.getText() + ", ";
             }
             if (cbP.isSelected()) {
-                worker += cbP.getText() + ",";
+                worker += cbP.getText() + ", ";
             }
             if (cbA.isSelected()) {
-                worker += cbA.getText() + ",";
+                worker += cbA.getText() + ", ";
             }
             if (cbS.isSelected()) {
-                worker += cbS.getText() + ",";
+                worker += cbS.getText() + ", ";
             }
-            worker = worker.substring(0, worker.length() - 1);
+            worker = worker.substring(0, worker.length() - 2);
 
             String productType = "";
             if (rbScs.isSelected()) {
@@ -336,10 +340,10 @@ public class Controller {
                 warning.setText("Order number should be in 9XXXXXX format");
             } else if (planTime.equals("")) {
                 warning.setText("Planned time required");
-            } else if (!Validation.isValidTime(planTime)) {
+            } else if (!Validation.isValidPlannedTime(planTime)) {
                 warning.setText("Planned time is incorrect. Enter number 1-99");
-            } else if (!actualTime.getText().isEmpty() && !Validation.isValidTime(realTime)) {
-                warning.setText("Actual time is incorrect. Enter number 1-99");
+            } else if (!actualTime.getText().isEmpty() && !Validation.isValidActualTime(realTime)) {
+                warning.setText("Actual time is incorrect. Enter number 0-99");
             } else {
                 orderNum = Integer.parseInt(orderNo.getText());
                 plTime = Integer.parseInt(plannedTime.getText());
@@ -390,10 +394,135 @@ public class Controller {
         clearFields();
         fetColumnList();
         fetRowList();
-
     }
 
+    public void updateActualTime() {
+        if (role.getText().equals("Member")) {
+            warning.setText("");
+            String orderNumber = orderNo.getText();
+            int orderNum = 0;
+            String realTime = actualTime.getText();
+            int actlTime = 0;
+            if (orderNumber.equals("")) {
+                warning.setText("Order number required");
+            } else if (!Validation.isValidOrderNumber(orderNumber)) {
+                warning.setText("Order number should be in 9XXXXXX format");
+            } else if (actualTime.getText().isEmpty() || !Validation.isValidActualTime(realTime)) {
+                warning.setText("Actual time is incorrect. Enter number 0-99");
+            } else {
+                orderNum = Integer.parseInt(orderNo.getText());
+                actlTime = Integer.parseInt(actualTime.getText());
 
+                UserDAO userDAO = new UserDAO();
+                User user = userDAO.getUser(logname.getText());
+                PlanDAO planDAO = new PlanDAO();
+                int userId = user.getId();
+                Plan plan = new Plan(orderNum, actlTime);
+                planDAO.editActualTime(plan, userId);
+                updateTableFromDB(orderNumber);
+            }
+        } else {
+            warning.setText("Please use Update button");
+        }
+    }
+
+    public void showOrder() {
+        warning.setText("");
+        String orderNumber = orderNo.getText();
+        if (orderNumber.equals("")) {
+            warning.setText("Order number required");
+        } else {
+            PlanDAO planDAO = new PlanDAO();
+            UserDAO userDAO = new UserDAO();
+            User user = userDAO.getUser(logname.getText());
+            try {
+                rsAllEntries = planDAO.showByOrderNumber(orderNumber, user);
+            } catch (NullPointerException e) {
+                warning.setText("No data to display");
+            }
+            //int orderNum = 0;
+            String productType = "";
+            String worker = "";
+            String workersList[] = new String[6];
+            String plTime = "";
+            String actTime = "";
+            String orderStatus = "";
+            //int userId = 0;
+
+            try {
+                if (rsAllEntries.next()) {
+                    ObservableList order = FXCollections.observableArrayList();
+                    for (int i = 1; i <= rsAllEntries.getMetaData().getColumnCount(); i++) {
+                        order.add(rsAllEntries.getString(i));
+                    }
+                    productType = (String) order.get(1);
+                    plTime = (String) order.get(3);
+                    actTime = (String) order.get(4);
+                    orderStatus = (String) order.get(5);
+                    //userId = Integer.parseInt((String) order.get(6));
+                    worker = (String) order.get(2);
+                    int countCommas = 0;
+                    if (worker.contains(",")) {
+                        Pattern pattern = Pattern.compile("[^,]*,");
+                        Matcher matcher = pattern.matcher(worker);
+                        while (matcher.find()) {
+                            countCommas++;
+                        }
+                        System.out.println("Number of commas: " + countCommas);
+                        String[] parts = worker.split(", ", countCommas + 1);
+                        for (int i = 0; i < countCommas + 1; i++) {
+                            workersList[i] = parts[i];
+
+                            System.out.println(i + ". parts " + parts[i]);
+                            System.out.println("workersList " + workersList[i]);
+
+                        }
+                    } else workersList[0] = worker;
+
+                    System.out.println("Order data added " + order);
+                } else {
+                    warning.setText("No data to display");
+                }
+
+            } catch (SQLException ex) {
+                System.out.println("Failure getting order data from SQL ");
+                ex.printStackTrace();
+            }
+            //Plan plan = new Plan(orderNum, productType, worker, plTime, actTime, orderStatus, userId);
+            orderNo.setText(orderNumber);
+            selectRadioButton(rbMko, productType);
+            selectRadioButton(rbScs, productType);
+            selectRadioButton(rbSko, productType);
+            selectRadioButton(rbZko, productType);
+            selectCheckBox(cbA, workersList);
+            selectCheckBox(cbJ, workersList);
+            selectCheckBox(cbK, workersList);
+            selectCheckBox(cbM, workersList);
+            selectCheckBox(cbP, workersList);
+            selectCheckBox(cbS, workersList);
+            plannedTime.setText(plTime);
+            actualTime.setText(actTime);
+            //plannedTime.setText(Integer.toString(plan.getPlannedTime()));
+            //actualTime.setText(Integer.toString(plan.getActualTime()));
+            comboStatus.valueProperty().set(orderStatus);
+        }
+    }
+
+    private void selectRadioButton(RadioButton radioButton, String rbText) {
+
+        if (radioButton.getText().equals(rbText)) {
+            radioButton.setSelected(true);
+        } else radioButton.setSelected(false);
+    }
+
+    private void selectCheckBox(CheckBox checkBox, String cbText[]) {
+        checkBox.setSelected(false);
+        for (int i = 0; i < cbText.length; i++) {
+            if (checkBox.getText().equals(cbText[i])) {
+                checkBox.setSelected(true);
+            }
+        }
+    }
 
     // po duomenų įvedimo išvalo nurodytus laukus, kad būtų patogiau suvesti naujus duomenis
     private void clearFields() {
@@ -496,7 +625,6 @@ public class Controller {
         ((Node) (event.getSource())).getScene().getWindow().hide();
 
     }
-
 
 
 }
