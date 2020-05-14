@@ -4,8 +4,6 @@ import java.sql.*;
 
 import plan.utils.Constant;
 
-import java.util.ArrayList;
-
 public class PlanDAO {
 
     public String add(Plan plan) {
@@ -109,7 +107,7 @@ public class PlanDAO {
             preparedStatement.setInt(1, plan.getActualTime());
             preparedStatement.setInt(2, plan.getOrderNum());
             preparedStatement.executeUpdate();
-            System.out.println("Edit Actual time query: " + query);
+            //System.out.println("Edit Actual time query: " + query);
             System.out.println("Actual time was successfully edited");
         } catch (SQLException e) {
             System.out.println("Error. Cannot edit actual time. User is not valid");
@@ -117,7 +115,7 @@ public class PlanDAO {
         }
     }
 
-    public void deleteOrderNum(int num) {
+    public void deleteOrder(int num) {
         String query = "DELETE FROM " + Constant.TABLE_NAME1 + " WHERE order_number=?";
         try {
             Connection connection = DriverManager.getConnection(Constant.URL + Constant.DB_NAME, "root", "");
@@ -130,6 +128,5 @@ public class PlanDAO {
             e.printStackTrace();
         }
     }
-
 
 }

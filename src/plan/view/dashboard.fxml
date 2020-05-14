@@ -7,303 +7,249 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0"
-      prefWidth="1300.0" style="-fx-background-color: #b2a4d5;" xmlns="http://javafx.com/javafx/10.0.2-internal"
-      xmlns:fx="http://javafx.com/fxml/1" fx:controller="plan.controller.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="850.0" prefWidth="1300.0" style="-fx-background-color: #c1b8d6;" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="plan.controller.Controller">
     <children>
-        <ScrollPane layoutX="510.0" layoutY="130.0" prefHeight="580.0" prefWidth="760.0"
-                    style="-fx-border-color: #a2a6a5; -fx-border-width: 5;">
+        <ScrollPane layoutX="510.0" layoutY="130.0" prefHeight="580.0" prefWidth="760.0" style="-fx-border-color: #a2a6a5; -fx-border-width: 5;">
             <content>
-                <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="580.0" prefWidth="750.0"
-                           style="-fx-background-color: #adc7c0;">
+                <TableView fx:id="table" layoutX="14.0" layoutY="14.0" prefHeight="580.0" prefWidth="750.0" style="-fx-background-color: #adc7c0; -fx-selection-bar: #beb4d6;">
                     <columns>
                     </columns>
                 </TableView>
             </content>
         </ScrollPane>
-        <Pane layoutX="26.0" layoutY="130.0" prefHeight="691.0" prefWidth="454.0"
-              style="-fx-background-color: #adc7c0; -fx-border-color: #a2a6a5; -fx-border-width: 5;">
+        <Pane layoutX="26.0" layoutY="130.0" prefHeight="691.0" prefWidth="454.0" style="-fx-background-color: #adc7c0; -fx-border-color: #a2a6a5; -fx-border-width: 5;">
             <children>
-                <TextField fx:id="orderNo" layoutX="20.0" layoutY="45.0" prefHeight="40.0" prefWidth="200.0"
-                           promptText="9XXXXXX"
-                           style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="orderNo" layoutX="20.0" layoutY="45.0" prefHeight="40.0" prefWidth="200.0" promptText="9XXXXXX" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
-                        <Font name="Roboto Light" size="16.0"/>
+                        <Font name="Roboto Light" size="16.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="plannedTime" layoutX="20.0" layoutY="385.0" prefHeight="40.0" prefWidth="50.0"
-                           style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="plannedTime" layoutX="20.0" layoutY="385.0" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
-                        <Font name="Roboto Light" size="15.0"/>
+                        <Font name="Roboto Light" size="15.0" />
                     </font>
                 </TextField>
-                <TextField fx:id="actualTime" layoutX="170.0" layoutY="385.0" prefHeight="40.0" prefWidth="50.0"
-                           style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="actualTime" layoutX="170.0" layoutY="385.0" prefHeight="40.0" prefWidth="50.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
-                        <Font name="Roboto Light" size="15.0"/>
+                        <Font name="Roboto Light" size="15.0" />
                     </font>
                 </TextField>
-                <Button fx:id="create" layoutX="20.0" layoutY="575.0" mnemonicParsing="false" onAction="#create"
-                        prefHeight="39.0" prefWidth="184.0"
-                        style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;"
-                        text="CREATE" textFill="#385d8a">
+                <Button fx:id="create" layoutX="20.0" layoutY="575.0" mnemonicParsing="false" onAction="#create" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="CREATE" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans Bold" size="14.0"/>
+                        <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="read" layoutX="245.0" layoutY="575.0" mnemonicParsing="false" onAction="#searchOrder"
-                        prefHeight="39.0" prefWidth="184.0"
-                        style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;"
-                        text="SEARCH" textFill="#385d8a">
+                <Button fx:id="read" layoutX="245.0" layoutY="575.0" mnemonicParsing="false" onAction="#searchOrder" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="SEARCH" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans Bold" size="14.0"/>
+                        <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="update" layoutX="20.0" layoutY="625.0" mnemonicParsing="false" onAction="#update"
-                        prefHeight="39.0" prefWidth="184.0"
-                        style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;"
-                        text="UPDATE" textFill="#385d8a">
+                <Button fx:id="update" layoutX="20.0" layoutY="625.0" mnemonicParsing="false" onAction="#update" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="UPDATE" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans Bold" size="14.0"/>
+                        <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="delete" layoutX="245.0" layoutY="625.0" mnemonicParsing="false" onAction="#delete"
-                        prefHeight="39.0" prefWidth="184.0"
-                        style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;"
-                        text="DELETE" textFill="#385d8a">
+                <Button fx:id="delete" layoutX="245.0" layoutY="625.0" mnemonicParsing="false" onAction="#delete" prefHeight="39.0" prefWidth="184.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="DELETE" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans Bold" size="14.0"/>
+                        <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
-                <Label fx:id="warning" layoutX="20.0" layoutY="525.0" prefHeight="39.0" prefWidth="420.0"
-                       textFill="#9b1c31">
+                <Label fx:id="warning" layoutX="20.0" layoutY="525.0" prefHeight="39.0" prefWidth="420.0" textFill="#9b1c31" wrapText="true">
                     <font>
-                        <Font size="18.0"/>
+                        <Font size="18.0" />
                     </font>
                 </Label>
-                <ComboBox fx:id="comboStatus" layoutX="20.0" layoutY="475.0" prefHeight="40.0" prefWidth="200.0"
-                          promptText="Choose status"
-                          style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <ComboBox fx:id="comboStatus" layoutX="20.0" layoutY="475.0" prefHeight="40.0" prefWidth="200.0" promptText="Choose status" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <items>
                         <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="Scheduled"/>
-                            <String fx:value="Processing"/>
-                            <String fx:value="Completed"/>
+                            <String fx:value="Scheduled" />
+                            <String fx:value="Processing" />
+                            <String fx:value="Completed" />
                         </FXCollections>
                     </items>
 
                 </ComboBox>
-                <CheckBox fx:id="cbK" layoutX="20.0" layoutY="235.0" mnemonicParsing="false" text="K.Samas"
-                          textFill="#385d8a">
+                <CheckBox fx:id="cbK" layoutX="20.0" layoutY="235.0" mnemonicParsing="false" text="K.Samas" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </CheckBox>
-                <CheckBox fx:id="cbM" layoutX="240.0" layoutY="235.0" mnemonicParsing="false" text="M.Morkuvienė"
-                          textFill="#385d8a">
+                <CheckBox fx:id="cbM" layoutX="240.0" layoutY="235.0" mnemonicParsing="false" text="M.Morkuvienė" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </CheckBox>
-                <CheckBox fx:id="cbJ" layoutX="20.0" layoutY="285.0" mnemonicParsing="false" prefHeight="17.0"
-                          prefWidth="128.0" text="J.Jonaitis" textFill="#385d8a">
+                <CheckBox fx:id="cbJ" layoutX="20.0" layoutY="285.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="128.0" text="J.Jonaitis" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </CheckBox>
-                <CheckBox fx:id="cbP" layoutX="240.0" layoutY="260.0" mnemonicParsing="false" prefHeight="17.0"
-                          prefWidth="112.0" text="P.Petraitis" textFill="#385d8a">
+                <CheckBox fx:id="cbP" layoutX="240.0" layoutY="260.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="112.0" text="P.Petraitis" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </CheckBox>
-                <CheckBox fx:id="cbA" layoutX="20.0" layoutY="260.0" mnemonicParsing="false" prefHeight="17.0"
-                          prefWidth="157.0" text="A.Adomaitienė" textFill="#385d8a">
+                <CheckBox fx:id="cbA" layoutX="20.0" layoutY="260.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="157.0" text="A.Adomaitienė" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </CheckBox>
-                <CheckBox fx:id="cbS" layoutX="240.0" layoutY="285.0" mnemonicParsing="false" text="S.Saulaitis"
-                          textFill="#385d8a">
+                <CheckBox fx:id="cbS" layoutX="240.0" layoutY="285.0" mnemonicParsing="false" text="S.Saulaitis" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </CheckBox>
-                <RadioButton fx:id="rbScs" layoutX="20.0" layoutY="135.0" mnemonicParsing="false" prefHeight="17.0"
-                             prefWidth="128.0" selected="true" text="Curtainsider" textFill="#385d8a">
+                <RadioButton fx:id="rbScs" layoutX="20.0" layoutY="135.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="128.0" text="Curtainsider" textFill="#385d8a">
                     <toggleGroup>
-                        <ToggleGroup fx:id="product"/>
+                        <ToggleGroup fx:id="product" />
                     </toggleGroup>
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </RadioButton>
-                <RadioButton fx:id="rbSko" layoutX="20.0" layoutY="160.0" mnemonicParsing="false" prefHeight="17.0"
-                             prefWidth="128.0" text="Semitrailer" textFill="#385d8a" toggleGroup="$product">
+                <RadioButton fx:id="rbSko" layoutX="20.0" layoutY="160.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="128.0" text="Semitrailer" textFill="#385d8a" toggleGroup="$product">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </RadioButton>
-                <RadioButton fx:id="rbMko" layoutX="240.0" layoutY="135.0" mnemonicParsing="false" prefHeight="19.0"
-                             prefWidth="170.0" text="Truck Box Body" textFill="#385d8a" toggleGroup="$product">
+                <RadioButton fx:id="rbMko" layoutX="240.0" layoutY="135.0" mnemonicParsing="false" prefHeight="19.0" prefWidth="170.0" text="Truck Box Body" textFill="#385d8a" toggleGroup="$product">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </RadioButton>
-                <RadioButton fx:id="rbZko" layoutX="240.0" layoutY="160.0" mnemonicParsing="false"
-                             text="Drawbar Trailer" textFill="#385d8a" toggleGroup="$product">
+                <RadioButton fx:id="rbZko" layoutX="240.0" layoutY="160.0" mnemonicParsing="false" text="Drawbar Trailer" textFill="#385d8a" toggleGroup="$product">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </RadioButton>
-                <Label layoutX="20.0" layoutY="200.0" prefHeight="27.0" prefWidth="231.0" text="Order accomplished by:"
-                       textFill="#385d8a">
+                <Label layoutX="20.0" layoutY="200.0" prefHeight="27.0" prefWidth="231.0" text="Order accomplished by:" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="18.0"/>
+                        <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
-                <Label layoutX="20.0" layoutY="100.0" prefHeight="27.0" prefWidth="151.0" text="Product type:"
-                       textFill="#385d8a">
+                <Label layoutX="20.0" layoutY="100.0" prefHeight="27.0" prefWidth="151.0" text="Product type:" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="18.0"/>
+                        <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
-                <Button layoutX="240.0" layoutY="45.0" mnemonicParsing="false" onAction="#showOrder" prefHeight="39.0"
-                        prefWidth="200.0"
-                        style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;"
-                        text="Show order" textFill="#385d8a">
+                <Button layoutX="240.0" layoutY="45.0" mnemonicParsing="false" onAction="#showOrder" prefHeight="39.0" prefWidth="200.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Show order" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans Bold" size="14.0"/>
+                        <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
                 <Label layoutX="20.0" layoutY="330.0" text="Order accomplishing time:" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="18.0"/>
+                        <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
                 <Label layoutX="20.0" layoutY="360.0" text="Planned time" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
                 <Label layoutX="170.0" layoutY="360.0" text="Actual time" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
                 <Label layoutX="20.0" layoutY="450.0" text="Order status:" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="18.0"/>
+                        <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
                 <Label layoutX="20.0" layoutY="15.0" text="Order Number" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="18.0"/>
+                        <Font name="DejaVu Sans" size="18.0" />
                     </font>
                 </Label>
-                <Button fx:id="updateTime" layoutX="280.0" layoutY="385.0" mnemonicParsing="false"
-                        onAction="#updateActualTime" prefHeight="39.0" prefWidth="155.0"
-                        style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;"
-                        text="Update actual time" textFill="#385d8a">
+                <Button fx:id="updateTime" layoutX="280.0" layoutY="385.0" mnemonicParsing="false" onAction="#updateActualTime" prefHeight="39.0" prefWidth="155.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Update actual time" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                     <padding>
-                        <Insets left="-1.0"/>
+                        <Insets left="-1.0" />
                     </padding>
                 </Button>
                 <Label layoutX="75.0" layoutY="405.0" text="days" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
                 <Label layoutX="225.0" layoutY="405.0" text="days" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
 
             </children>
         </Pane>
-        <Text fill="#385d8a" layoutX="26.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0"
-              text="Easy Planing of Orders" textAlignment="CENTER" wrappingWidth="749.9999986886978">
+        <Text fill="#385d8a" layoutX="26.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Easy Planing of Orders" textAlignment="CENTER" wrappingWidth="750">
             <font>
-                <Font name="Roboto Light" size="60.0"/>
+                <Font name="Roboto Light" size="55.0" />
             </font>
         </Text>
-        <Pane layoutX="790.0" layoutY="6.0" prefHeight="120.0" prefWidth="480.0"
-              style="-fx-border-color: #a2a6a5; -fx-border-width: 5; -fx-background-color: #adc7c0;">
+        <Pane layoutX="790.0" layoutY="6.0" prefHeight="120.0" prefWidth="480.0" style="-fx-border-color: #a2a6a5; -fx-border-width: 5; -fx-background-color: #adc7c0;">
             <children>
                 <Label layoutX="49.0" layoutY="60.0" text="User name:" textFill="#656161">
                     <font>
-                        <Font name="DejaVu Sans" size="16.0"/>
+                        <Font name="DejaVu Sans" size="16.0" />
                     </font>
                 </Label>
                 <Label layoutX="20.0" layoutY="85.0" text="Role in a team:" textFill="#656161">
                     <font>
-                        <Font name="DejaVu Sans" size="16.0"/>
+                        <Font name="DejaVu Sans" size="16.0" />
                     </font>
                 </Label>
-                <Label fx:id="logname" layoutX="155.0" layoutY="60.0" prefHeight="20.0" prefWidth="200.0"
-                       textFill="#385d8a">
+                <Label fx:id="logname" layoutX="155.0" layoutY="60.0" prefHeight="20.0" prefWidth="200.0" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="16.0"/>
+                        <Font name="DejaVu Sans" size="16.0" />
                     </font>
                 </Label>
-                <Label fx:id="role" layoutX="155.0" layoutY="85.0" prefHeight="17.0" prefWidth="200.0"
-                       textFill="#385d8a">
+                <Label fx:id="role" layoutX="155.0" layoutY="85.0" prefHeight="17.0" prefWidth="200.0" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="16.0"/>
+                        <Font name="DejaVu Sans" size="16.0" />
                     </font>
                 </Label>
-                <Button fx:id="logOut" layoutX="372.0" layoutY="14.0" mnemonicParsing="false"
-                        onAction="#logOutDashboard"
-                        style="-fx-background-color: #beb4d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;"
-                        text="Log out" textFill="#385d8a">
+                <Button fx:id="logOut" layoutX="372.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToLoginWindow" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Log out" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans Bold" size="14.0"/>
+                        <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Button>
                 <Label layoutX="91.0" layoutY="35.0" text="Team:" textFill="#656161">
                     <font>
-                        <Font name="DejaVu Sans" size="16.0"/>
+                        <Font name="DejaVu Sans" size="16.0" />
                     </font>
                 </Label>
-                <Label fx:id="team" layoutX="155.0" layoutY="35.0" prefHeight="20.0" prefWidth="200.0"
-                       textFill="#385d8a">
+                <Label fx:id="team" layoutX="155.0" layoutY="35.0" prefHeight="20.0" prefWidth="200.0" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="16.0"/>
+                        <Font name="DejaVu Sans" size="16.0" />
                     </font>
                 </Label>
             </children>
         </Pane>
-        <Pane layoutX="510.0" layoutY="728.0" prefHeight="92.0" prefWidth="760.0"
-              style="-fx-background-color: #adc7c0; -fx-border-color: #a2a6a5; -fx-border-width: 5;">
+        <Pane layoutX="510.0" layoutY="728.0" prefHeight="92.0" prefWidth="760.0" style="-fx-background-color: #adc7c0; -fx-border-color: #a2a6a5; -fx-border-width: 5;">
             <children>
                 <Label layoutX="330.0" layoutY="14.0" text="Order status" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans Bold" size="14.0"/>
+                        <Font name="DejaVu Sans Bold" size="14.0" />
                     </font>
                 </Label>
-                <Pane layoutX="180.0" layoutY="45.0" prefHeight="30.0" prefWidth="30.0"
-                      style="-fx-background-color: #eb6589;"/>
+                <Pane layoutX="180.0" layoutY="45.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #eb6589;" />
                 <Label layoutX="220.0" layoutY="50.0" text="Sheduled" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
-                <Pane layoutX="320.0" layoutY="45.0" prefHeight="30.0" prefWidth="30.0"
-                      style="-fx-background-color: #f7f194;"/>
-                <Pane layoutX="460.0" layoutY="45.0" prefHeight="30.0" prefWidth="30.0"
-                      style="-fx-background-color: #adf5ab;"/>
+                <Pane layoutX="320.0" layoutY="45.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #f7f194;" />
+                <Pane layoutX="460.0" layoutY="45.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #adf5ab;" />
                 <Label layoutX="360.0" layoutY="50.0" text="Processing" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
                 <Label layoutX="500.0" layoutY="50.0" text="Completed" textFill="#385d8a">
                     <font>
-                        <Font name="DejaVu Sans" size="14.0"/>
+                        <Font name="DejaVu Sans" size="14.0" />
                     </font>
                 </Label>
             </children>

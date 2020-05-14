@@ -10,17 +10,6 @@ public class Plan {
     private String orderStatus;
     private int userId;
 
-    public Plan(int id, int orderNum, String productType, String worker, int plannedTime, int actualTime, String orderStatus, int userId) {
-        this.id = id;
-        this.orderNum = orderNum;
-        this.productType = productType;
-        this.worker = worker;
-        this.plannedTime = plannedTime;
-        this.actualTime = actualTime;
-        this.orderStatus = orderStatus;
-        this.userId = userId;
-    }
-
     public Plan(int orderNum, String productType, String worker, int plannedTime, int actualTime, String orderStatus, int userId) {
         this.orderNum = orderNum;
         this.productType = productType;

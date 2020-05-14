@@ -11,7 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import plan.model.Plan;
@@ -20,9 +19,9 @@ import plan.model.User;
 import plan.model.UserDAO;
 import plan.utils.Validation;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +34,8 @@ public class Controller {
     private Label error;
     @FXML
     private TextField regUser;
+    @FXML
+    private TextField regSurname;
     @FXML
     private PasswordField regPassw;
     @FXML
@@ -84,9 +85,21 @@ public class Controller {
     @FXML
     private Label role;
 
+    // Warning strings are used in create(), update(), updateActualTime(), showOrder():
+    String emptyStatus = "Please check order status";
+    String emptyOrderNum = "Order number required";
+    String workerNotSelected = "Please select worker(s)";
+    String productTypeNotSelected = "Please select product type";
+    String invalidOrderNum = "Order number should be in 9XXXXXX format";
+    String emptyPlannedTime = "Planned time required";
+    String invalidPlannedTime = "Planned time is incorrect. Enter number 1-99";
+    String invalidActualTime = "Actual time is incorrect. Enter number 0-99";
 
     ResultSet rsAllEntries;
     ObservableList<ObservableList> data = FXCollections.observableArrayList();
+    ArrayList<RadioButton> rbProductType = new ArrayList();
+    ArrayList<CheckBox> cbWorker = new ArrayList();
+
 
     public void login(ActionEvent event) {
         if (Validation.isValidUsername(username.getText()) && Validation.isValidPassword(password.getText())) {
@@ -96,13 +109,11 @@ public class Controller {
                 User user = userDAO.getUser(username.getText());
                 dashboard(event, user);
                 error.setText("You made log in");
-                //
             } else {
                 error.setText(msg);
             }
-
         } else {
-            error.setText("Wrong user name or password!");
+            error.setText("No user found under these credentials");
         }
         error.setVisible(true);
     }
@@ -125,7 +136,8 @@ public class Controller {
             Parent root = FXMLLoader.load(getClass().getResource("../view/register.fxml"));
             Stage stage = new Stage();
             stage.setTitle("Register");
-            stage.setScene(new Scene(root, 450, 450));
+            stage.setScene(new Scene(root, 450, 500));
+            root.getStylesheets().add(String.valueOf(getClass().getResource("../view/RegisterStyle.css")));
             stage.show();
             ((Node) (event.getSource())).getScene().getWindow().hide();
         } catch (Exception e) {
@@ -139,16 +151,19 @@ public class Controller {
         // clear errors on btn pressed
         regError.setText("");
         if (!Validation.isValidUsername(regUser.getText())) {
-            regError.setText("Username is incorrect (letters and numbers only, at least 5 char)");
+            regError.setText("Username is incorrect (letters and numbers only, at least 5 char.)");
+            isRegistered = false;
+        } else if (!Validation.isValidSurname(regSurname.getText())) {
+            regError.setText("Name Surname is incorrect (pattern - N.Surname, at least 4 char.)");
             isRegistered = false;
         } else if (!Validation.isValidPassword(regPassw.getText())) {
-            regError.setText("Password is incorrect (letters and numbers only, at least 5 char)");
+            regError.setText("Password is incorrect (letters and numbers only, at least 5 char.)");
             isRegistered = false;
         } else if (!regConfPassw.getText().equals(regPassw.getText())) {
             regError.setText("Password doesn't match");
             isRegistered = false;
         } else if (!Validation.isValidEmail(regEmail.getText())) {
-            regError.setText("Email is not correct, pattern- name@one.org");
+            regError.setText("Email is not correct, pattern- name@job.com");
             isRegistered = false;
         } else if (regTeam.getValue() == null) { //(!regTeam.getSelectionModel().isEmpty())
             regError.setText("Team name is not sellected");
@@ -156,9 +171,9 @@ public class Controller {
         }
 
         if (isRegistered) {
-            User user = new User(regUser.getText(), regPassw.getText(), regEmail.getText(), (String) regTeam.getValue(), admin.isSelected());
+            User user = new User(regUser.getText(), regSurname.getText(), regPassw.getText(), regEmail.getText(), (String) regTeam.getValue(), admin.isSelected());
             UserDAO userDAO = new UserDAO();
-            String msg = userDAO.register(user);
+            String msg = userDAO.register(regUser.getText(), user);
             if (msg.contains("successfully")) {
                 try {
                     loadLogin();
@@ -197,82 +212,48 @@ public class Controller {
             if (lblLoginName != null) lblLoginName.setText(user.getUsername());
             //Team leader has admin rights
             if (lblLoginRole != null) lblLoginRole.setText(user.isAdmin() ? "Leader" : "Member");
-
+            CheckBox cbK = (CheckBox) root.lookup("#cbK");
+            CheckBox cbA = (CheckBox) root.lookup("#cbA");
+            CheckBox cbJ = (CheckBox) root.lookup("#cbJ");
+            CheckBox cbM = (CheckBox) root.lookup("#cbM");
+            CheckBox cbP = (CheckBox) root.lookup("#cbP");
+            CheckBox cbS = (CheckBox) root.lookup("#cbS");
+            ArrayList<CheckBox> cb = new ArrayList<>();
+            cb.add(cbK);
+            cb.add(cbA);
+            cb.add(cbJ);
+            cb.add(cbM);
+            cb.add(cbP);
+            cb.add(cbS);
+            for (int i = 0; i < cb.size(); i++) {
+                if (cb.get(i).getText().equals(user.getNameSurname())) {
+                    cb.get(i).setSelected(true);
+                }
+            }
             stage.show();
             ((Node) (event.getSource())).getScene().getWindow().hide();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public void create() {
-        String orderNumber = orderNo.getText();
         int orderNum = 0;
-        String planTime = plannedTime.getText();
         int plTime = 0;
-        String realTime = actualTime.getText();
         int actlTime = 0;
-
-        String worker = "";
-
-        if (cbJ.isSelected()) {
-            worker += cbJ.getText() + ", ";
-        }
-        if (cbK.isSelected()) {
-            worker += cbK.getText() + ", ";
-        }
-        if (cbM.isSelected()) {
-            worker += cbM.getText() + ", ";
-        }
-        if (cbP.isSelected()) {
-            worker += cbP.getText() + ", ";
-        }
-        if (cbA.isSelected()) {
-            worker += cbA.getText() + ",";
-        }
-        if (cbS.isSelected()) {
-            worker += cbS.getText() + ", ";
-        }
-        worker = worker.substring(0, worker.length() - 2);
-
-        String productType = "";
-        if (rbScs.isSelected()) {
-            productType += rbScs.getText();
-        } else if (rbSko.isSelected()) {
-            productType += rbSko.getText();
-        } else if (rbMko.isSelected()) {
-            productType += rbMko.getText();
-        } else if (rbZko.isSelected()) {
-            productType += rbZko.getText();
-        }
-
+        String worker = workerSelected();
+        String productType = productTypeSelected();
         String orderStatus = "";
-        if (!comboStatus.getSelectionModel().isEmpty()) {
-            orderStatus += comboStatus.getValue();
-        } else {
-            warning.setText("Please check team members");
-        }
-
-        if (orderNumber.equals("")) {
-            warning.setText("Order number required");
-        } else if (!Validation.isValidOrderNumber(orderNumber)) {
-            warning.setText("Order number should be in 9XXXXXX format");
-        } else if (planTime.equals("")) {
-            warning.setText("Planned time required");
-        } else if (!Validation.isValidPlannedTime(planTime)) {
-            warning.setText("Planned time is incorrect. Enter number 1-99");
-        } else if (!actualTime.getText().isEmpty() && !Validation.isValidActualTime(realTime)) {
-            warning.setText("Actual time is incorrect. Enter number 0-99");
-        } else {
+        Boolean validData = validEntries();
+        if (validData) {
             orderNum = Integer.parseInt(orderNo.getText());
+            orderStatus += comboStatus.getValue();
             plTime = Integer.parseInt(plannedTime.getText());
             if (actualTime.getText().isEmpty()) {
                 actlTime = 0;
             } else {
                 actlTime = Integer.parseInt(actualTime.getText());
             }
-
             UserDAO userDAO = new UserDAO();
             User user = userDAO.getUser(logname.getText());
             PlanDAO planDAO = new PlanDAO();
@@ -280,102 +261,114 @@ public class Controller {
             Plan plan = new Plan(orderNum, productType, worker, plTime, actlTime, orderStatus, userId);
             String msg = planDAO.add(plan);
             warning.setText(msg);
-            updateTableFromDB(orderNumber);
+            updateTableFromDB(orderNo.getText());
         }
-
     }
-
+    // Function validates whether all entries of dashboard are correct
+    public Boolean validEntries() {
+        String orderNumber = orderNo.getText();
+        String planTime = plannedTime.getText();
+        String realTime = actualTime.getText();
+        String worker = workerSelected();
+        String productType = productTypeSelected();
+        Boolean validData = false;
+        if (orderNumber.equals("")) {
+            warning.setText(emptyOrderNum);
+        } else if (!Validation.isValidOrderNumber(orderNumber)) {
+            warning.setText(invalidOrderNum);
+        } else if (worker.equals("")) {
+            warning.setText(workerNotSelected);
+        } else if (productType.equals("")) {
+            warning.setText(productTypeNotSelected);
+        } else if (planTime.equals("")) {
+            warning.setText(emptyPlannedTime);
+        } else if (!Validation.isValidPlannedTime(planTime)) {
+            warning.setText(invalidPlannedTime);
+        } else if (!actualTime.getText().isEmpty() && !Validation.isValidActualTime(realTime)) {
+            warning.setText(invalidActualTime);
+        } else if (comboStatus.getSelectionModel().isEmpty()) {
+            warning.setText(emptyStatus);
+        } else validData = true;
+        return validData;
+    }
     public void update() {
         if (role.getText().equals("Leader")) {
-            String orderNumber = orderNo.getText();
+            warning.setText("");
             int orderNum = 0;
-            String planTime = plannedTime.getText();
             int plTime = 0;
-            String realTime = actualTime.getText();
             int actlTime = 0;
-
-            String worker = "";
-
-            if (cbJ.isSelected()) {
-                worker += cbJ.getText() + ", ";
-            }
-            if (cbK.isSelected()) {
-                worker += cbK.getText() + ", ";
-            }
-            if (cbM.isSelected()) {
-                worker += cbM.getText() + ", ";
-            }
-            if (cbP.isSelected()) {
-                worker += cbP.getText() + ", ";
-            }
-            if (cbA.isSelected()) {
-                worker += cbA.getText() + ", ";
-            }
-            if (cbS.isSelected()) {
-                worker += cbS.getText() + ", ";
-            }
-            worker = worker.substring(0, worker.length() - 2);
-
-            String productType = "";
-            if (rbScs.isSelected()) {
-                productType += rbScs.getText();
-            } else if (rbSko.isSelected()) {
-                productType += rbSko.getText();
-            } else if (rbMko.isSelected()) {
-                productType += rbMko.getText();
-            } else if (rbZko.isSelected()) {
-                productType += rbZko.getText();
-            }
-
+            String worker = workerSelected();
+            String productType = productTypeSelected();
             String orderStatus = "";
-            if (!comboStatus.getSelectionModel().isEmpty()) {
-                orderStatus += comboStatus.getValue();
-            } else {
-                warning.setText("Please check team members");
-            }
-
-            if (orderNumber.equals("")) {
-                warning.setText("Order number required");
-            } else if (!Validation.isValidOrderNumber(orderNumber)) {
-                warning.setText("Order number should be in 9XXXXXX format");
-            } else if (planTime.equals("")) {
-                warning.setText("Planned time required");
-            } else if (!Validation.isValidPlannedTime(planTime)) {
-                warning.setText("Planned time is incorrect. Enter number 1-99");
-            } else if (!actualTime.getText().isEmpty() && !Validation.isValidActualTime(realTime)) {
-                warning.setText("Actual time is incorrect. Enter number 0-99");
-            } else {
+            Boolean validData = validEntries();
+            if (validData) {
                 orderNum = Integer.parseInt(orderNo.getText());
+                orderStatus += comboStatus.getValue();
                 plTime = Integer.parseInt(plannedTime.getText());
                 if (actualTime.getText().isEmpty()) {
                     actlTime = 0;
                 } else {
                     actlTime = Integer.parseInt(actualTime.getText());
                 }
-
                 UserDAO userDAO = new UserDAO();
                 User user = userDAO.getUser(logname.getText());
                 PlanDAO planDAO = new PlanDAO();
                 int userId = user.getId();
                 Plan plan = new Plan(orderNum, productType, worker, plTime, actlTime, orderStatus, userId);
                 planDAO.editByOrderNum(plan);
-                updateTableFromDB(orderNumber);
+                updateTableFromDB(orderNo.getText());
+                warning.setText("Order " + orderNum + " updated successfully");
             }
         } else {
             clearFields();
             warning.setText("Update feature is only for Team Leader");
         }
     }
+    /* Function finds which worker(s) (CheckBox) is (are) selected
+     * return worker - string containing all selected workers
+     */
+    public String workerSelected() {
+        String worker = "";
+        cbListAddElement();
+        for (int i = 0; i < cbWorker.size(); i++) {
+            if (cbWorker.get(i).isSelected()) {
+                worker += cbWorker.get(i).getText() + ", ";
+            }
+        }
+        if (!worker.equals("")) {
+            worker = worker.substring(0, worker.length() - 2);
+        }
+        return worker;
+    }
 
+    /* Function finds what product type is  selected
+     * return productType - name of selected product
+     */
+    public String productTypeSelected() {
+        String productType = "";
+        rbListAddElement();
+        for (int i = 0; i < rbProductType.size(); i++) {
+            if (rbProductType.get(i).isSelected()) {
+                productType += (rbProductType.get(i).getText());
+                System.out.println("Selected product type :" + productType);
+            }
+        }
+        return productType;
+    }
+    
     public void searchOrder() {
+        warning.setText("");
         updateTableFromDB(orderNo.getText());
     }
 
     public void delete() {
+        warning.setText("");
         if (role.getText().equals("Leader")) {
             PlanDAO planDAO = new PlanDAO();
-            planDAO.deleteOrderNum(Integer.parseInt((String) orderNo.getText()));
+            planDAO.deleteOrder(Integer.parseInt((String) orderNo.getText()));
+            warning.setText("Order " + orderNo.getText() + " was deleted successfully");
             updateTableFromDB("");
+
         } else {
             clearFields();
             warning.setText("Delete feature is only for team leader");
@@ -395,7 +388,10 @@ public class Controller {
         fetColumnList();
         fetRowList();
     }
-
+    /* Function updates actual time, if team member is logged in,
+     * because they do not have permission to update order.
+     * only team leader has this permission
+     */
     public void updateActualTime() {
         if (role.getText().equals("Member")) {
             warning.setText("");
@@ -404,11 +400,11 @@ public class Controller {
             String realTime = actualTime.getText();
             int actlTime = 0;
             if (orderNumber.equals("")) {
-                warning.setText("Order number required");
+                warning.setText(emptyOrderNum);
             } else if (!Validation.isValidOrderNumber(orderNumber)) {
-                warning.setText("Order number should be in 9XXXXXX format");
+                warning.setText(invalidOrderNum);
             } else if (actualTime.getText().isEmpty() || !Validation.isValidActualTime(realTime)) {
-                warning.setText("Actual time is incorrect. Enter number 0-99");
+                warning.setText(invalidActualTime);
             } else {
                 orderNum = Integer.parseInt(orderNo.getText());
                 actlTime = Integer.parseInt(actualTime.getText());
@@ -420,17 +416,24 @@ public class Controller {
                 Plan plan = new Plan(orderNum, actlTime);
                 planDAO.editActualTime(plan, userId);
                 updateTableFromDB(orderNumber);
+                warning.setText("Actual time of order " + orderNum + " updated successfully ");
             }
         } else {
             warning.setText("Please use Update button");
         }
     }
-
+    /* Function fills dashboard fields with data received from data base according order number
+     * its role is to simplify users work.
+     * in one button press user gets all data of specified order,
+     * therefore demand to rewrite not edited fields is eliminated
+     */
     public void showOrder() {
         warning.setText("");
         String orderNumber = orderNo.getText();
         if (orderNumber.equals("")) {
-            warning.setText("Order number required");
+            warning.setText(emptyOrderNum);
+        } else if (!Validation.isValidOrderNumber(orderNumber)) {
+            warning.setText(invalidOrderNum);
         } else {
             PlanDAO planDAO = new PlanDAO();
             UserDAO userDAO = new UserDAO();
@@ -440,15 +443,12 @@ public class Controller {
             } catch (NullPointerException e) {
                 warning.setText("No data to display");
             }
-            //int orderNum = 0;
             String productType = "";
             String worker = "";
             String workersList[] = new String[6];
             String plTime = "";
             String actTime = "";
             String orderStatus = "";
-            //int userId = 0;
-
             try {
                 if (rsAllEntries.next()) {
                     ObservableList order = FXCollections.observableArrayList();
@@ -459,7 +459,6 @@ public class Controller {
                     plTime = (String) order.get(3);
                     actTime = (String) order.get(4);
                     orderStatus = (String) order.get(5);
-                    //userId = Integer.parseInt((String) order.get(6));
                     worker = (String) order.get(2);
                     int countCommas = 0;
                     if (worker.contains(",")) {
@@ -472,13 +471,10 @@ public class Controller {
                         String[] parts = worker.split(", ", countCommas + 1);
                         for (int i = 0; i < countCommas + 1; i++) {
                             workersList[i] = parts[i];
-
                             System.out.println(i + ". parts " + parts[i]);
                             System.out.println("workersList " + workersList[i]);
-
                         }
                     } else workersList[0] = worker;
-
                     System.out.println("Order data added " + order);
                 } else {
                     warning.setText("No data to display");
@@ -488,33 +484,49 @@ public class Controller {
                 System.out.println("Failure getting order data from SQL ");
                 ex.printStackTrace();
             }
-            //Plan plan = new Plan(orderNum, productType, worker, plTime, actTime, orderStatus, userId);
             orderNo.setText(orderNumber);
-            selectRadioButton(rbMko, productType);
-            selectRadioButton(rbScs, productType);
-            selectRadioButton(rbSko, productType);
-            selectRadioButton(rbZko, productType);
-            selectCheckBox(cbA, workersList);
-            selectCheckBox(cbJ, workersList);
-            selectCheckBox(cbK, workersList);
-            selectCheckBox(cbM, workersList);
-            selectCheckBox(cbP, workersList);
-            selectCheckBox(cbS, workersList);
+            rbListAddElement();
+            for (int i = 0; i < rbProductType.size(); i++) {
+                selectRadioButton(rbProductType.get(i), productType);
+            }
+            cbListAddElement();
+            for (int i = 0; i < cbWorker.size(); i++) {
+                selectCheckBox(cbWorker.get(i), workersList);
+            }
             plannedTime.setText(plTime);
             actualTime.setText(actTime);
-            //plannedTime.setText(Integer.toString(plan.getPlannedTime()));
-            //actualTime.setText(Integer.toString(plan.getActualTime()));
             comboStatus.valueProperty().set(orderStatus);
         }
     }
 
-    private void selectRadioButton(RadioButton radioButton, String rbText) {
+    // Function adds all check boxes into ArrayList
+    public void cbListAddElement() {
+        cbWorker.clear();
+        cbWorker.add(cbJ);
+        cbWorker.add(cbK);
+        cbWorker.add(cbM);
+        cbWorker.add(cbP);
+        cbWorker.add(cbA);
+        cbWorker.add(cbS);
+    }
 
+    // Function adds all radio buttons into ArrayList
+    public void rbListAddElement() {
+        rbProductType.clear();
+        rbProductType.add(rbScs);
+        rbProductType.add(rbSko);
+        rbProductType.add(rbMko);
+        rbProductType.add(rbZko);
+    }
+
+    // Function checks whether Radio button is selected
+    private void selectRadioButton(RadioButton radioButton, String rbText) {
         if (radioButton.getText().equals(rbText)) {
             radioButton.setSelected(true);
         } else radioButton.setSelected(false);
     }
 
+    // Function checks whether CheckBox is selected
     private void selectCheckBox(CheckBox checkBox, String cbText[]) {
         checkBox.setSelected(false);
         for (int i = 0; i < cbText.length; i++) {
@@ -524,33 +536,42 @@ public class Controller {
         }
     }
 
-    // po duomenų įvedimo išvalo nurodytus laukus, kad būtų patogiau suvesti naujus duomenis
+    // fields are cleared after data is entered
     private void clearFields() {
         orderNo.clear();
         orderNo.setPromptText("9XXXXXX");
-        rbScs.setSelected(true);
-        rbSko.setSelected(false);
-        rbMko.setSelected(false);
-        rbZko.setSelected(false);
-        cbK.setSelected(false);
-        cbM.setSelected(false);
-        cbJ.setSelected(false);
-        cbP.setSelected(false);
-        cbA.setSelected(false);
-        cbS.setSelected(false);
+        if (rbProductType.isEmpty()) {
+            rbListAddElement();
+        }
+        for (int i = 0; i < rbProductType.size(); i++) {
+            rbProductType.get(i).setSelected(false);
+        }
+        if (cbWorker.isEmpty()) {
+            cbListAddElement();
+        }
+        for (int i = 0; i < cbWorker.size(); i++) {
+            cbWorker.get(i).setSelected(false);
+        }
+        UserDAO userDAO = new UserDAO();
+        User user = userDAO.getUser(logname.getText());
+        for (int i = 0; i < cbWorker.size(); i++) {
+            if(cbWorker.get(i).getText().equals(user.getNameSurname())) {
+                cbWorker.get(i).setSelected(true);
+            } else {
+                cbWorker.get(i).setSelected(false);
+            }
+        }
         plannedTime.clear();
         actualTime.clear();
         comboStatus.valueProperty().set(null);
     }
 
+    // Function creates columns for TableView
     public void fetColumnList() {
-
         try {
-
             table.getColumns().clear();
             if (rsAllEntries != null) {
                 //SQL FOR SELECTING ALL OF CUSTOMER
-
                 for (int i = 0; i < rsAllEntries.getMetaData().getColumnCount(); i++) {
                     //We are using non property style for making dynamic table
                     final int j = i;
@@ -578,6 +599,7 @@ public class Controller {
                             col.setText(rsAllEntries.getMetaData().getColumnName(i + 1)); //if column name in SQL Database is not found, then TableView column receive SQL Database current column name (not readable)
                             break;
                     }
+
                     col.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>() {
                         public ObservableValue<String> call(TableColumn.CellDataFeatures<ObservableList, String> param) {
                             return new SimpleStringProperty(param.getValue().get(j).toString());
@@ -586,9 +608,7 @@ public class Controller {
 
                     table.getColumns().removeAll(col);
                     table.getColumns().addAll(col);
-                    System.out.println("Column [" + i + "] ");
                 }
-
             } else {
                 warning.setText("No columns to display");
             }
@@ -597,23 +617,26 @@ public class Controller {
         }
     }
 
-    //fetches rows and data from the list
+    // Function creates rows for TableView, by fetching rows and data from the list
     public void fetRowList() {
         try {
             data.clear();
             if (rsAllEntries != null) {
+                ObservableList row = null;
+                //Iterate Row
                 while (rsAllEntries.next()) {
-                    //Iterate Row
-                    ObservableList row = FXCollections.observableArrayList();
+                    row = FXCollections.observableArrayList();
+                    //Iterate Column
                     for (int i = 1; i <= rsAllEntries.getMetaData().getColumnCount(); i++) {
-                        //Iterate Column
                         row.add(rsAllEntries.getString(i));
                     }
-                    System.out.println("Row [1] added " + row);
                     data.add(row);
                 }
                 //connects table with list
                 table.setItems(data);
+                // cell instances are generated for Order Status column and then colored
+                customiseStatusCells();
+
             } else {
                 warning.setText("No rows to display");
             }
@@ -622,13 +645,46 @@ public class Controller {
         }
     }
 
-    public void logOutDashboard(ActionEvent event) {
+    // cell instances are generated for Order Status column
+    public void customiseStatusCells() {
+        TableColumn column = table.getVisibleLeafColumn(5);
+        column.setCellFactory(new Callback<TableColumn, TableCell>() {
+            public TableCell call(TableColumn p) {
+                //cell implementation
+                return new styleCell();
+            }
+        });
+    }
 
+    // Cells of Order Status column are colored according cell value
+    static class styleCell extends TableCell<String, String> {
+        @Override
+        public void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);
+            if (empty || item == null) {
+                setText("");
+            } else {
+                if (item.equals("Scheduled")) {
+                    setText(item);
+                    setStyle("-fx-background-color: #eb6589; -fx-border-color:  #f08ea8; -fx-border-width: 0 0 1px 0;");
+                } else if (item.equals("Completed")) {
+                    setText(item);
+                    setStyle("-fx-background-color: #adf5ab; -fx-border-color:  #92d590; -fx-border-width: 0 0 1px 0;");
+                } else if (item.equals("Processing")) {
+                    setText(item);
+                    setStyle("-fx-background-color: #f7f194; -fx-border-color:  #e9e063; -fx-border-width: 0 0 1px 0;");
+                }
+            }
+        }
+    }
+    /* Function closes current window (register or dashboard) and opens log in window
+     * return worker - string containing all selected workers
+     */
+    public void backToLoginWindow(ActionEvent event) {
         loadLogin();
         // hides current stage (window)
         ((Node) (event.getSource())).getScene().getWindow().hide();
 
     }
-
 
 }

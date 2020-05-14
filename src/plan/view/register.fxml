@@ -14,60 +14,60 @@
         <RowConstraints />
     </rowConstraints>
     <children>
-        <Pane prefHeight="450.0" prefWidth="450.0" style="-fx-background-color: #adc7c0;">
+        <Pane prefHeight="500.0" prefWidth="450.0" style="-fx-background-color: #adc7c0;">
             <children>
                 <Label layoutX="80.0" layoutY="100.0" text="User name:" textAlignment="RIGHT" textFill="#385d8a">
                     <font>
                         <Font name="Tahoma" size="14.0" />
                     </font></Label>
-                <Label layoutX="87.0" layoutY="135.0" prefHeight="20.0" prefWidth="66.0" text="Password:" textAlignment="RIGHT" textFill="#385d8a">
+                <Label layoutX="87.0" layoutY="170.0" prefHeight="20.0" prefWidth="66.0" text="Password:" textAlignment="RIGHT" textFill="#385d8a">
                     <font>
                         <Font name="Tahoma" size="14.0" />
                     </font></Label>
-                <TextField fx:id="regUser" layoutX="160.0" layoutY="95.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="regUser" layoutX="160.0" layoutY="95.0" prefHeight="25.0" prefWidth="230.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
-                        <Font size="14.0" />
+                        <Font name="Roboto Light" size="14.0" />
                     </font></TextField>
-                <PasswordField fx:id="regPassw" layoutX="160.0" layoutY="130.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <PasswordField fx:id="regPassw" layoutX="160.0" layoutY="165.0" prefHeight="25.0" prefWidth="230.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
-                        <Font size="14.0" />
+                        <Font name="Roboto Light" size="14.0" />
                     </font></PasswordField>
-                <Button fx:id="regSignin" layoutX="160.0" layoutY="380.0" mnemonicParsing="false" onAction="#registerLogin" prefHeight="35.0" prefWidth="215.0" style="-fx-background-color: #b2a4d5; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Register" textFill="#385d8a">
+                <Button fx:id="regSignin" layoutX="160.0" layoutY="410.0" mnemonicParsing="false" onAction="#registerLogin" prefHeight="35.0" prefWidth="230.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5; -fx-border-radius: 3;" text="Register" textFill="#385d8a">
                <font>
                   <Font name="DejaVu Sans Bold" size="14.0" />
                </font></Button>
 
-                <Label layoutX="34.0" layoutY="170.0" prefHeight="20.0" prefWidth="117.0" text="Confirm Password:" textAlignment="RIGHT" textFill="#385d8a">
+                <Label layoutX="34.0" layoutY="205.0" prefHeight="20.0" prefWidth="117.0" text="Confirm Password:" textAlignment="RIGHT" textFill="#385d8a">
                     <font>
                         <Font name="Tahoma" size="14.0" />
                     </font>
                 </Label>
-                <Label layoutX="112.0" layoutY="205.0" text="Email:" textAlignment="RIGHT" textFill="#385d8a">
+                <Label layoutX="112.0" layoutY="240.0" text="Email:" textAlignment="RIGHT" textFill="#385d8a">
                     <font>
                         <Font name="Tahoma" size="14.0" />
                     </font>
                 </Label>
-                <PasswordField fx:id="regConfPassw" layoutX="160.0" layoutY="165.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <PasswordField fx:id="regConfPassw" layoutX="160.0" layoutY="200.0" prefHeight="25.0" prefWidth="230.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
-                        <Font size="14.0" />
+                        <Font name="Roboto Light" size="14.0" />
                     </font>
                 </PasswordField>
-                <TextField fx:id="regEmail" layoutX="160.0" layoutY="200.0" prefHeight="25.0" prefWidth="215.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+                <TextField fx:id="regEmail" layoutX="160.0" layoutY="235.0" prefHeight="25.0" prefWidth="230.0" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                     <font>
-                        <Font size="14.0" />
+                        <Font name="Roboto Light" size="14.0" />
                     </font>
                 </TextField>
-                <Label fx:id="regError" layoutX="26.0" layoutY="340.0" prefHeight="30.0" prefWidth="399.0" textAlignment="RIGHT" textFill="#9b1c31">
+                <Label fx:id="regError" layoutX="26.0" layoutY="350.0" prefHeight="53.0" prefWidth="399.0" textFill="#9b1c31" wrapText="true">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Label>
-                <CheckBox fx:id="admin" layoutX="158.0" layoutY="280.0" mnemonicParsing="false" />
-                <Label layoutX="18.0" layoutY="280.0" text="Administrator permition" textFill="#385d8a">
+                <CheckBox fx:id="admin" layoutX="158.0" layoutY="315.0" mnemonicParsing="false" />
+                <Label layoutX="18.0" layoutY="315.0" text="Team Leader permition" textFill="#385d8a">
                <font>
                   <Font name="Tahoma" size="13.0" />
                </font></Label>
-            <ComboBox fx:id="regTeam" layoutX="160.0" layoutY="235.0" prefHeight="25.0" prefWidth="215.0" promptText="-- Choose Team --" style="-fx-background-color: #e0dfe4;">
+            <ComboBox fx:id="regTeam" layoutX="160.0" layoutY="270.0" prefHeight="25.0" prefWidth="230.0" promptText="Choose Team " style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
                 <items>
                     <FXCollections fx:factory="observableArrayList">
                         <String fx:value="Supreme Team" />
@@ -76,20 +76,40 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <Pane layoutY="-1.0" prefHeight="68.0" prefWidth="450.0" style="-fx-background-color: #b2a4d5; -fx-border-color: #a2a6a5;">
+            <Pane layoutY="-1.0" prefHeight="68.0" prefWidth="450.0" style="-fx-background-color: #c1b8d6; -fx-border-color: #a2a6a5;">
                <children>
                       <Label alignment="CENTER" layoutX="10.0" layoutY="8.0" prefHeight="53.0" prefWidth="430.0" styleClass="style.css" text="Register New Team Member" textAlignment="CENTER" textFill="#385d8a">
                           <font>
-                              <Font name="Roboto Light" size="33.0" />
+                              <Font name="Roboto Light" size="26.0" />
                           </font>
                       </Label>
                </children>
             </Pane>
-            <Label layoutX="70.0" layoutY="239.0" text="Team Name:" textAlignment="RIGHT" textFill="#385d8a">
+            <Label layoutX="70.0" layoutY="275.0" text="Team Name:" textAlignment="RIGHT" textFill="#385d8a">
                <font>
                   <Font name="Tahoma" size="14.0" />
                </font>
             </Label>
+            <Label layoutX="50.0" layoutY="135.0" text="Name Surname:" textFill="#385d8a">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <TextField fx:id="regSurname" layoutX="160.0" layoutY="130.0" prefHeight="25.0" prefWidth="230.0" promptText="N.Surname" style="-fx-background-color: #e0dfe4; -fx-border-color: #a2a6a5; -fx-border-radius: 3;">
+               <font>
+                  <Font name="Roboto Light" size="14.0" />
+               </font>
+            </TextField>
+            <Label layoutX="160.0" layoutY="460.0" text="Already having an account?" textFill="#385d8a">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Label>
+            <Hyperlink fx:id="regLog" layoutX="337.0" layoutY="456.0" onAction="#backToLoginWindow" text="Log in" textFill="#0a14e4">
+               <font>
+                  <Font name="Tahoma" size="14.0" />
+               </font>
+            </Hyperlink>
             </children>
         </Pane>
     </children>
